@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PatientTriage.ai — Emergency Department Triage Decision Support">
+    <title>{{block "title" .}}PatientTriage.ai{{end}}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="nav-brand">
+            <span class="nav-logo">⚕</span>
+            <span class="nav-title">PatientTriage<span class="nav-dot">.ai</span></span>
+        </div>
+        <div class="nav-links">
+            <a href="/" class="nav-link" id="nav-dashboard">Dashboard</a>
+            <a href="/patients/new" class="nav-link" id="nav-add-patient">Add Patient</a>
+            <a href="/audit" class="nav-link" id="nav-audit">Audit Log</a>
+        </div>
+        <div class="nav-status">
+            <span class="status-dot {{if eq .Mode "START"}}status-start{{else}}status-normal{{end}}"></span>
+            <span class="status-text">{{if eq .Mode "START"}}START MODE{{else}}Normal{{end}}</span>
+        </div>
+    </nav>
+
+    <div id="mode-banner">
+        {{template "mode_banner" .}}
+    </div>
+
+    <main class="main-content">
+        {{template "content" .}}
+    </main>
+
+    <script src="/static/js/htmx.min.js"></script>
+    <script src="/static/js/htmx-sse.js"></script>
+</body>
+</html>

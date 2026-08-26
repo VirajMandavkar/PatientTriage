@@ -1,0 +1,97 @@
+{{define "title"}}Dashboard — PatientTriage.ai{{end}}
+{{define "content"}}
+<div class="dashboard-grid">
+    <!-- Stats Row -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-value" id="stat-active">{{.ActiveCount}}</div>
+            <div class="stat-label">Active Patients</div>
+        </div>
+        <div class="stat-card stat-esi1">
+            <div class="stat-value" id="stat-critical">{{.CriticalCount}}</div>
+            <div class="stat-label">ESI 1-2 (Critical)</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="stat-avg-wait">{{.AvgWait}}m</div>
+            <div class="stat-label">Avg Wait Time</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="stat-threshold">{{.ActiveCount}}/{{.Threshold}}</div>
+            <div class="stat-label">START Threshold</div>
+        </div>
+    </div>
+
+    <!-- Main Queue -->
+    <div class="queue-panel glass-card">
+        <div class="panel-header">
+            <h2>Triage Queue</h2>
+            <div class="panel-actions">
+                <form method="POST" action="/api/seed" style="display:inline">
+                    <button type="submit" class="btn btn-outline btn-sm" id="btn-seed">Seed Demo Data</button>
+                </form>
+            </div>
+        </div>
+
+        <div hx-ext="sse" sse-connect="/sse/queue">
+            <table class="queue-table" id="queue-table">
+                <thead>
+                    <tr>
+                        <th>ESI</th>
+                        <th>Patient</th>
+                        <th>Age/Sex</th>
+                        <th>Chief Complaint</th>
+                        <th>Vitals</th>
+                        <th>Caution</th>
+                        <th>Wait</th>
+                        <th>Suggested Action</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="queue-body" sse-swap="queue-update" hx-swap="innerHTML">
+                    {{range .Queue}}
+                    {{template "queue_row" .}}
+                    {{end}}
+                </tbody>
+            </table>
+            {{if not .Queue}}
+            <div class="empty-state" id="empty-state">
+                <div class="empty-icon">🏥</div>
+                <p>No active patients in queue</p>
+                <p class="text-muted">Add a patient or seed demo data to get started</p>
+            </div>
+            {{end}}
+        </div>
+    </div>
+
+    <!-- Resource Panel -->
+    <div class="resource-panel glass-card">
+        <div class="panel-header">
+            <h2>Resources</h2>
+        </div>
+        <div class="resource-section">
+            <h3 class="resource-title">Rooms</h3>
+            <div class="resource-grid">
+                {{range .Rooms}}
+                <div class="resource-item {{if .Available}}available{{else}}occupied{{end}}" id="room-{{.ID}}">
+                    <span class="resource-icon">🚪</span>
+                    <span class="resource-name">{{.Name}}</span>
+                    <span class="resource-status">{{if .Available}}Open{{else}}Busy{{end}}</span>
+                </div>
+                {{end}}
+            </div>
+        </div>
+        <div class="resource-section">
+            <h3 class="resource-title">Physicians</h3>
+            <div class="resource-grid">
+                {{range .Doctors}}
+                <div class="resource-item {{if .Available}}available{{else}}occupied{{end}}" id="doc-{{.ID}}">
+                    <span class="resource-icon">👨‍⚕️</span>
+                    <span class="resource-name">{{.Name}}</span>
+                    <span class="resource-status">{{if .Available}}Available{{else}}Busy{{end}}</span>
+                </div>
+                {{end}}
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}

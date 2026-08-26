@@ -1,0 +1,7 @@
+{{if not .LLMAvailable}}
+<span class="badge caution-badge llm-na" title="LLM Unavailable">LLM N/A</span>
+{{else if .Flag}}
+<span class="badge caution-badge flagged pulsing" title="{{.Reason}}">⚠ Caution</span>
+{{else}}
+<span class="badge caution-badge clear">✔</span>
+{{end}}

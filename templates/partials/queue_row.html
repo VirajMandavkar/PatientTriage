@@ -1,0 +1,61 @@
+<tr id="patient-row-{{.Patient.ID}}" class="queue-row esi-level-{{.CurrentScore.ESILevel}}">
+    <td>
+        <span class="esi-badge esi-{{.CurrentScore.ESILevel}}">
+            {{if eq .CurrentScore.ESILevel 1}}ESI-1{{end}}
+            {{if eq .CurrentScore.ESILevel 2}}ESI-2{{end}}
+            {{if eq .CurrentScore.ESILevel 3}}ESI-3{{end}}
+            {{if eq .CurrentScore.ESILevel 4}}ESI-4{{end}}
+            {{if eq .CurrentScore.ESILevel 5}}ESI-5{{end}}
+        </span>
+        {{if .CurrentScore.StartTag}}
+        <span class="start-tag tag-{{.CurrentScore.StartTag}}">{{.CurrentScore.StartTag}}</span>
+        {{end}}
+    </td>
+    <td class="patient-name">{{.Patient.Name}}</td>
+    <td class="patient-demo">{{.Patient.Age}}{{.Patient.Sex}}</td>
+    <td class="chief-complaint" title="{{.Patient.ChiefComplaint}}">{{.Patient.ChiefComplaint}}</td>
+    <td class="vitals-cell">
+        <span class="vital" title="Heart Rate">♥{{.LatestVitals.HeartRate}}</span>
+        <span class="vital" title="Respiratory Rate">⬡{{.LatestVitals.RespiratoryRate}}</span>
+        <span class="vital" title="SpO2">O₂{{printf "%.0f" .LatestVitals.SpO2}}%</span>
+        <span class="vital" title="Blood Pressure">⇅{{.LatestVitals.SystolicBP}}/{{.LatestVitals.DiastolicBP}}</span>
+    </td>
+    <td>
+        {{template "caution_badge" .CautionFlag}}
+    </td>
+    <td class="wait-time">{{.WaitMinutes}}m</td>
+    <td class="suggested-action">
+        {{if .SuggestedRoom}}{{.SuggestedRoom}} / {{.SuggestedDoc}}{{else}}—{{end}}
+    </td>
+    <td class="action-buttons">
+        <form method="POST" action="/patients/{{.Patient.ID}}/confirm" style="display:inline">
+            <input type="hidden" name="suggested" value="{{.SuggestedRoom}} / {{.SuggestedDoc}}">
+            <button type="submit" class="btn btn-success btn-xs" id="btn-confirm-{{.Patient.ID}}" title="Confirm suggestion">✓ Confirm</button>
+        </form>
+        <div class="override-group">
+            <button class="btn btn-outline-warning btn-xs" id="btn-override-toggle-{{.Patient.ID}}"
+                    onclick="this.nextElementSibling.classList.toggle('show')">✎ Override</button>
+            <div class="override-dropdown" id="override-dropdown-{{.Patient.ID}}">
+                <form method="POST" action="/patients/{{.Patient.ID}}/override">
+                    <select name="chosen_action" class="override-select" required>
+                        <option value="">Select alternative...</option>
+                        {{range $.Rooms}}
+                        <option value="{{.Name}}">{{.Name}}</option>
+                        {{end}}
+                    </select>
+                    <select name="chosen_doctor" class="override-select">
+                        {{range $.Doctors}}
+                        <option value="{{.Name}}">{{.Name}}</option>
+                        {{end}}
+                    </select>
+                    <input type="hidden" name="suggested" value="{{.SuggestedRoom}} / {{.SuggestedDoc}}">
+                    <input type="hidden" name="overridden_by" value="Triage Nurse">
+                    <button type="submit" class="btn btn-warning btn-xs">Submit Override</button>
+                </form>
+            </div>
+        </div>
+        <form method="POST" action="/patients/{{.Patient.ID}}/worsen" style="display:inline">
+            <button type="submit" class="btn btn-outline-danger btn-xs" id="btn-worsen-{{.Patient.ID}}" title="Simulate worsening vitals (demo)">⚡ Worsen</button>
+        </form>
+    </td>
+</tr>

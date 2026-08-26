@@ -1,0 +1,44 @@
+{{define "title"}}Audit Log — PatientTriage.ai{{end}}
+{{define "content"}}
+<div class="audit-container">
+    <div class="glass-card">
+        <div class="panel-header">
+            <h2>Override Audit Log</h2>
+            <p class="panel-subtitle">Every override of a system suggestion is permanently recorded</p>
+        </div>
+
+        {{if .Overrides}}
+        <table class="audit-table" id="audit-table">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Patient</th>
+                    <th>Suggested Action</th>
+                    <th>Chosen Action</th>
+                    <th>Overridden By</th>
+                    <th>Reason</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Overrides}}
+                <tr class="audit-row" id="audit-{{.ID}}">
+                    <td class="audit-time">{{.CreatedAt.Format "2006-01-02 15:04:05"}}</td>
+                    <td>{{.PatientName}}</td>
+                    <td class="audit-suggested">{{.SuggestedAction}}</td>
+                    <td class="audit-chosen">{{.ChosenAction}}</td>
+                    <td>{{.OverriddenBy}}</td>
+                    <td class="audit-reason">{{if .OverrideReason}}{{.OverrideReason}}{{else}}<span class="text-muted">—</span>{{end}}</td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+        {{else}}
+        <div class="empty-state">
+            <div class="empty-icon">📋</div>
+            <p>No overrides recorded yet</p>
+            <p class="text-muted">Overrides will appear here when a triage nurse changes a system suggestion</p>
+        </div>
+        {{end}}
+    </div>
+</div>
+{{end}}
