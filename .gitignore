@@ -1,0 +1,25 @@
+# Binary
+PatientTriage
+*.exe
+
+# Database
+data/*.db
+data/*.db-journal
+data/*.db-wal
+
+# LLM model files
+*.gguf
+llama.cpp/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test coverage
+coverage.out

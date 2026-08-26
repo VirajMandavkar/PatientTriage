@@ -1,0 +1,5 @@
+root   ::= "{" ws "\"flag\":" ws boolean "," ws "\"reason\":" ws string "," ws "\"confidence\":" ws number ws "}"
+boolean ::= "true" | "false"
+string  ::= "\"" ([^"\\] | "\\" .)* "\""
+number  ::= "0" ( "." [0-9] [0-9]? )? | "1" ( ".0" "0"? )?
+ws     ::= [ \t\n]*
