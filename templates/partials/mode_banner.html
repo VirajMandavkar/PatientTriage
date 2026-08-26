@@ -1,3 +1,4 @@
+{{define "mode_banner"}}
 {{if eq .Mode "START"}}
 <div id="mode-banner" class="mode-banner mode-start pulsing">
     ⚠ MASS CASUALTY MODE (START) ⚠ — {{.ActiveCount}} active patients
@@ -6,4 +7,5 @@
 <div id="mode-banner" class="mode-banner mode-normal">
     Operating Mode: Normal
 </div>
+{{end}}
 {{end}}

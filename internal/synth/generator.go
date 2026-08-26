@@ -197,7 +197,7 @@ func SeedDatabase(db *sql.DB, gen *Generator, counts map[int]int) error {
 
 			v := gen.GenerateVitals(patientID, esiLevel)
 			_, err = db.Exec(
-				`INSERT INTO vitals (patient_id, heart_rate, respiratory_rate, spo2, systolic_bp, diastolic_bp, temperature, pain_level, gcs, capillary_refill, recorded_at)
+				`INSERT INTO vitals_history (patient_id, heart_rate, respiratory_rate, spo2, systolic_bp, diastolic_bp, temperature, pain_level, gcs, capillary_refill, recorded_at)
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 				v.PatientID, v.HeartRate, v.RespiratoryRate, v.SpO2, v.SystolicBP, v.DiastolicBP, v.Temperature, v.PainLevel, v.GCS, v.CapillaryRefill, v.RecordedAt,
 			)

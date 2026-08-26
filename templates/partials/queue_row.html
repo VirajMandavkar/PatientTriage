@@ -1,3 +1,4 @@
+{{define "queue_row"}}
 <tr id="patient-row-{{.Patient.ID}}" class="queue-row esi-level-{{.CurrentScore.ESILevel}}">
     <td>
         <span class="esi-badge esi-{{.CurrentScore.ESILevel}}">
@@ -59,3 +60,4 @@
         </form>
     </td>
 </tr>
+{{end}}
